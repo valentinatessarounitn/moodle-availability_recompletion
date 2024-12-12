@@ -77,17 +77,27 @@ class condition extends \core_availability\condition {
         \core_availability\info $info,
         $grabthelot,
         $userid
-    ) {
+    ): bool {
+        global $DB;
+
+        
+        // $info->get_course(); is fine when the option 'this course' is selected
+        // TODO: Need to change this code to check the recompletion of a course different from the current one
         $course = $info->get_course();
-        $context = \context_course::instance($course->id);
-        // $allow = is_enrolled($context, $userid, '', true);  //todo fix this
 
-        // The NOT condition applies before accessallgroups (i.e. if you
-        // set something to be available to those NOT in group X,
-        // people with accessallgroups can still access it even if
-        // they are in group X).
+        // user_with_recompletion is true if the user with id === userid has already completed the course with id === $course->id in the past
+        $user_with_recompletion = $DB->record_exists_select('local_recompletion_cc', 'userid = ? and course = ? and timecompleted IS NOT NULL', array($userid, $course->id));
+        
+        $allow = $user_with_recompletion;
 
-        return $not;
+        if ($not) {
+            $allow = !$allow;
+        }
+        
+        // Debug print
+        debugging('Checking recompletion condition for user ' . $userid . ' has already completed in the past the course ' . $course->id . ' ' . $course->fullname . ': ' . ($user_with_recompletion ? 'YES' : 'NO'), DEBUG_NONE);
+
+        return $allow;
     }
 
     public function get_description(
@@ -102,10 +112,9 @@ class condition extends \core_availability\condition {
         // Note: it does not depend on the current user.
         //$allow = $not ? !$this->allow : $this->allow;
 
-        $name = 'this course'; // todo change course name
+        $name = get_string('course', 'availability_recompletion'); // todo change course name
 
-        // $not is true if in Access restrictions the condition is set to 'Student must not match the following'.
-
+        // $not == true => in Access restrictions the condition is set to 'Student must not match the following'.
         $requireornot = $not ? 'requires_recompletion' : 'requires_notrecompletion';
         return get_string($requireornot, 'availability_recompletion', $name);
     }
