@@ -1,7 +1,7 @@
 YUI.add('moodle-availability_recompletion-form', function (Y, NAME) {
 
     /**
-     * JavaScript for form editing group conditions.
+     * JavaScript for form editing other completion conditions.
      *
      * @module moodle-availability_recompletion-form
      */
@@ -14,37 +14,62 @@ YUI.add('moodle-availability_recompletion-form', function (Y, NAME) {
     M.availability_recompletion.form = Y.Object(M.core_availability.plugin);
     
     /**
-     * Groups available for selection (alphabetical order).
-     *
-     * @property groups
-     * @type Array
-     */
-    M.availability_recompletion.form.groups = null;
-    
-    /**
      * Initialises this plugin.
      *
      * @method initInner
+     * @param {Array} datcm Array of objects containing cmid => name
      */
-    M.availability_recompletion.form.initInner = function() {
-      // nothing to initialize
+    M.availability_recompletion.form.initInner = function(datcm) {
+        this.datcm = datcm;
     };
     
     M.availability_recompletion.form.getNode = function(json) {
         // Create HTML structure.
 
-        var description = M.util.get_string('short_description', 'availability_recompletion');
-        var html = '<span class="form-inline"><label><span class="p-r-1">'+ description + ' </span></label></span>';
-        var node = Y.Node.create(html); 
+        var html = '<span class="col-form-label p-r-1"> ' + M.util.get_string('title', 'availability_recompletion') + '</span>' +
+                   ' <span class="availability-group form-group"><label>' +
+                   M.util.get_string('label_start', 'availability_recompletion') +
+                   ' <select class="custom-select" name="cm">' +
+                '<option value="0">' + M.util.get_string('choosedots', 'moodle') + '</option>';
+
+        for (var i = 0; i < this.datcm.length; i++) {
+            var cm = this.datcm[i];
+            // String has already been escaped using format_string.
+            html += '<option value="' + cm.id + '">' + cm.name + '</option>';
+        }
+
+        html += '</select></label>'
+        html += '<label>' + M.util.get_string('label_end', 'availability_recompletion') + ' </label></span>';
+        var node = Y.Node.create('<span class="form-inline">' + html + '</span>');
+    
+        // Set initial values.
+        if (json.cm !== undefined &&
+                node.one('select[name=cm] > option[value=' + json.cm + ']')) {
+            node.one('select[name=cm]').set('value', '' + json.cm);
+        }
+    
+        // Add event handlers (first time only).
+        if (!M.availability_recompletion.form.addedEvents) {
+            M.availability_recompletion.form.addedEvents = true;
+            var root = Y.one('.availability-field');
+            root.delegate('change', function() {
+                // Whichever dropdown changed, just update the form.
+                M.core_availability.form.update();
+            }, '.availability_recompletion select');
+        }
+    
         return node;
     };
     
     M.availability_recompletion.form.fillValue = function(value, node) {
-        // no fills
+        value.cm = parseInt(node.one('select[name=cm]').get('value'), 10);
     };
     
     M.availability_recompletion.form.fillErrors = function(errors, node) {
-    // no errors possible
+        var cmid = parseInt(node.one('select[name=cm]').get('value'), 10);
+        if (cmid === 0) {
+            errors.push('availability_recompletion:error_selectcmid');
+        }
     };
     
     

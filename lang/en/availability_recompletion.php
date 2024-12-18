@@ -22,18 +22,26 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['description'] = 'Exclude students who have already completed this course and have been removed due to certificate expiration.';
+$string['description'] = 'Exclude or limit to students who have already completed the course and have been removed due to certificate expiration.';
 $string['error_selectrecompletion'] = 'Need local/recompletion plugin.';
-$string['error_recompletion'] = '';
-$string['error_database'] = '';
-$string['course'] = 'this course';
+$string['error_recompletion'] = 'error_recompletion';
+$string['error_database'] = 'error_database';
+
 $string['missing'] = '(missing)';
 $string['pluginname'] = 'Restriction by recompletion';
 $string['title'] = 'Recompletion';
 
-// todo: replace 'this course' with course name (<strong>{$a}</strong>)
-$string['short_description'] = 'Student has completed this course and the certification has expired';
+
 
 $string['requires_recompletion'] = 'The student has <strong>not</strong> completed <strong>{$a}</strong> in the past'; 
 $string['requires_notrecompletion'] = 'The student has already completed <strong>{$a}</strong> in the past';
 $string['privacy:metadata'] = 'The Restriction by recompletion plugin does not store any personal data.';
+
+// Exceptions
+$string['error_selectcmid'] = 'You must select a course for the recompletion condition.';
+
+
+// js
+$string['label_start'] = 'Student has completed';
+$string['label_end'] = 'and the certification has expired';
+$string['this_course'] = 'this course';

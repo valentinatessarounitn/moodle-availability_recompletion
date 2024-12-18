@@ -41,9 +41,7 @@
     protected function get_javascript_strings() {
         // You can return a list of names within your language file and the
         // system will include them here.
-        // Should you need strings from another language file, you can also
-        // call $PAGE->requires->strings_for_js manually from here.)
-        return array();
+        return array('label_end', 'label_start', 'title', 'this_course');
     }
 
     /**
@@ -57,7 +55,46 @@
         // If you want, you can add some parameters here which will be
         // passed into your JavaScript init method. If you don't include
         // this function, there will be no parameters.
-        return array();
+        
+        global $DB;
+        $context = \context_course::instance($course->id);
+
+        // get all course names that are present in the recompletion table
+        $datcms = array();
+
+        // get the list of all courses with at least one user who has completed the course and has the possibility to recomplete it
+        $sql = "SELECT DISTINCT id, category, fullname FROM {course} 
+                WHERE id IN (SELECT course FROM {local_recompletion_cc} WHERE timecompleted IS NOT NULL)
+                ORDER BY fullname ASC";
+
+        $other = $DB->get_records_sql($sql);
+
+
+
+        foreach ($other as $othercm) {
+
+            if(($othercm->category > 0) && ($othercm->id == $course->id)){
+                // add the current course to the list with fullname 'this course'
+                $thiscourse = get_string('this_course', 'availability_recompletion');
+                $datcms[] = (object)array(
+                    'id' => $course->id,
+                    'name' => format_string($thiscourse, true, array('context' => $context))
+                );
+            }
+
+            // disable not created course and default course
+            if(($othercm->category > 0) && ($othercm->id != $course->id)){
+                    $datcms[] = (object)array(
+                        'id' => $othercm->id,
+                        'name' => format_string($othercm->fullname, true, array('context' => $context))
+                    );
+            }
+        }
+
+        // Debug print
+        debugging('Frontend course available ' . print_r($datcms, true), DEBUG_NONE);
+
+        return array($datcms);
     }
 
     protected function allow_add(
@@ -70,6 +107,9 @@
         // if there are no groupings on the course. This helps to simplify
         // the user interface. If you don't include this function, it will
         // appear.
-        return true;
+
+        // Check if there's at least one other module with recompletion info.
+        $params = $this->get_javascript_init_params($course, $cm, $section);
+        return ((array)$params[0]) != false;        
     }
 }

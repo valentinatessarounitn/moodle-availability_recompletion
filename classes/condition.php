@@ -25,6 +25,7 @@
  namespace availability_recompletion;
 
  defined('MOODLE_INTERNAL') || die();
+ use core_availability\info;
 
 /**
  * Condition main class.
@@ -34,9 +35,12 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class condition extends \core_availability\condition {
-    // Any data associated with the condition can be stored in member
-    // variables. Here's an example variable:
-    //protected $allow;
+
+    // @var int ID of course that this condition requires
+    protected $courseid;
+
+    // @var bool whether the user has already completed the course and then removed it
+    protected $courserecompletion;
 
     /**
      * Constructor.
@@ -53,14 +57,27 @@ class condition extends \core_availability\condition {
 
         // It is also a good idea to check for invalid values here and
         // throw a coding_exception if the structure is wrong.
+
+        // Get courseid.
+        if (isset($structure->cm) && is_number($structure->cm)) {
+            $this->courseid = (int)$structure->cm;
+        } else {
+            throw new \coding_exception('Invalid course ID: null or non-integer value');
+        }
+
+        // Debug print
+        // debugging('structure: ' . print_r($structure, true), DEBUG_NONE);
+        echo '<br>inside init<br>';
+        echo 'courseid: ' . $this->courseid;
+        // debugging('Course ID: ' . $this->courseid, DEBUG_NORMAL);
     }
 
     /**
      * save the plugin configuration to an activity.
      */
     public function save() {
-        //$result = (object)array('type' => 'recompletion', 'allow' => $this->allow);
-        $result = (object)array('type' => 'recompletion');
+
+        $result = (object)array('type' => 'recompletion', 'course' => $this->courseid);
         return $result;
     }
 
@@ -80,23 +97,33 @@ class condition extends \core_availability\condition {
     ): bool {
         global $DB;
 
-        
-        // $info->get_course(); is fine when the option 'this course' is selected
-        // TODO: Need to change this code to check the recompletion of a course different from the current one
-        $course = $info->get_course();
+        /*
+        if($this->courseid == NULL) {
+            debugging('Checking recompletion condition for user ' . $userid . ' missing courseid ' . $course->id . ' ' . $course->fullname . ': ' . ($user_with_recompletion ? 'YES' : 'NO'), DEBUG_NONE);
+        }*/
 
-        // user_with_recompletion is true if the user with id === userid has already completed the course with id === $course->id in the past
-        $user_with_recompletion = $DB->record_exists_select('local_recompletion_cc', 'userid = ? and course = ? and timecompleted IS NOT NULL', array($userid, $course->id));
+        $course = $this->courseid;
+
+        // Debug print
+        echo '<br>inside is_available';
+        echo '<br> courseid: ' . $course;
+        echo '<br> userid ' . $userid;
+
+        // $courserecompletion is true if the user with id === userid has already completed the course with id === $course in the past and then removed it.
+        $this->courserecompletion = $DB->record_exists_select('local_recompletion_cc', 'userid = ? and course = ? and timecompleted IS NOT NULL', array($userid, $course));
         
-        $allow = $user_with_recompletion;
+        $allow = $this->courserecompletion;
 
         if ($not) {
             $allow = !$allow;
         }
         
         // Debug print
-        debugging('Checking recompletion condition for user ' . $userid . ' has already completed in the past the course ' . $course->id . ' ' . $course->fullname . ': ' . ($user_with_recompletion ? 'YES' : 'NO'), DEBUG_NONE);
+        //debugging('Checking recompletion condition for user ' . $userid . ' has already completed in the past the course ' . $course . ': ' . ($this->courserecompletion ? 'YES' : 'NO'), DEBUG_NONE);
 
+        echo '<br> User ' . $userid . ' has already completed in the past the course ' . $course . '? ';
+        echo '<br> ' . ($this->courserecompletion ? 'YES' : 'NO');
+        
         return $allow;
     }
 
@@ -112,7 +139,17 @@ class condition extends \core_availability\condition {
         // Note: it does not depend on the current user.
         //$allow = $not ? !$this->allow : $this->allow;
 
-        $name = get_string('course', 'availability_recompletion'); // todo change course name
+        $name = get_string('this_course', 'availability_recompletion'); // default value is 'this course'
+
+        // when the condition is set on a course different from the current one, 
+        // instead of using 'this course' I use the name of the course on which the constraint was applied.
+        if($info->get_course()->id != $this->courseid && $this->courseid != NULL) {
+
+            $sqlcoursefullname = "SELECT fullname FROM {course} WHERE id = $this->courseid LIMIT 1";
+            $fullname = $DB->get_record_sql($sqlcoursefullname);
+
+            $name = fullname;
+        }
 
         // $not == true => in Access restrictions the condition is set to 'Student must not match the following'.
         $requireornot = $not ? 'requires_recompletion' : 'requires_notrecompletion';
@@ -124,6 +161,20 @@ class condition extends \core_availability\condition {
         // stuff like that. Just make a short string representation
         // of the values of the condition, suitable for developers.
         //return $this->allow ? 'YES' : 'NO';
-        return 'todo';
+        return $this-> courseid . ' : ' . ($this->courserecompletion ? 'YES' : 'NO');
     }
+
+     /**
+     * Returns a JSON object which corresponds to a condition of this type.
+     *
+     * Intended for unit testing, as normally the JSON values are constructed
+     * by JavaScript code.
+     *
+     * @param int $courseid Course id of other activity
+     */
+    /*
+    public static function get_json($courseid) {
+        return (object)array('type' => 'recompletion', 'cm' => (int)$courseid);
+    }*/
+    
 }
