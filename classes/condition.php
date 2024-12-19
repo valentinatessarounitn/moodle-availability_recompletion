@@ -97,11 +97,6 @@ class condition extends \core_availability\condition {
     ): bool {
         global $DB;
 
-        /*
-        if($this->courseid == NULL) {
-            debugging('Checking recompletion condition for user ' . $userid . ' missing courseid ' . $course->id . ' ' . $course->fullname . ': ' . ($user_with_recompletion ? 'YES' : 'NO'), DEBUG_NONE);
-        }*/
-
         $course = $this->courseid;
 
         // Debug print
@@ -154,7 +149,6 @@ class condition extends \core_availability\condition {
         // $not == true => in Access restrictions the condition is set to 'Student must not match the following'.
         $requireornot = $not ? 'requires_recompletion' : 'requires_notrecompletion';
         return get_string($requireornot, 'availability_recompletion', $name);
-        // todo da sistemare, stampa  Not available unless: Lo studente ha già completato {$a} in passato se non è this course
     }
 
     protected function get_debug_string() {
