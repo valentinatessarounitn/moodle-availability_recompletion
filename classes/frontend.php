@@ -63,7 +63,7 @@
         $datcms = array();
 
         // get the list of all courses with at least one user who has completed the course and has the possibility to recomplete it
-        $sql = "SELECT DISTINCT id, category, fullname FROM {course} 
+        $sql = "SELECT DISTINCT id, category, shortname FROM {course} 
                 WHERE id IN (SELECT course FROM {local_recompletion_cc} WHERE timecompleted IS NOT NULL)
                 ORDER BY fullname ASC";
 
@@ -74,7 +74,7 @@
         foreach ($other as $othercm) {
 
             if(($othercm->category > 0) && ($othercm->id == $course->id)){
-                // add the current course to the list with fullname 'this course'
+                // add the current course to the list with as 'this course'
                 $thiscourse = get_string('this_course', 'availability_recompletion');
                 $datcms[] = (object)array(
                     'id' => $course->id,
@@ -86,7 +86,7 @@
             if(($othercm->category > 0) && ($othercm->id != $course->id)){
                     $datcms[] = (object)array(
                         'id' => $othercm->id,
-                        'name' => format_string($othercm->fullname, true, array('context' => $context))
+                        'name' => format_string($othercm->shortname, true, array('context' => $context))
                     );
             }
         }
