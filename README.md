@@ -1,8 +1,6 @@
 moodle-availability_recompletion
 ========================
 
-[![Repo](https://github.com/valentinatessarounitn/moodle-availability_recompletion)](https://github.com/valentinatessarounitn/moodle-availability_recompletion)
-
 Moodle availability plugin which lets users restrict resources and activities based on recompletion of the selected course.
 
 
@@ -78,7 +76,7 @@ IT "Impostazioni / Condizioni per l'accesso" -> "Lo studente NON DEVE soddisfare
 
 The administrator must restrict the activities of course B to students who only need to renew the certificate.
 
-Tthe teacher, in "Settings / Restrict access" for individual activities, must add "Student Restriction type MUST match the following: Student has completed COURSE A and the certification has expired."
+The teacher, in "Settings / Restrict access" for individual activities, must add "Student Restriction type MUST match the following: Student has completed COURSE A and the certification has expired."
 
 IT "Impostazioni / Condizioni per l'accesso" -> "Lo studente DEVE soddisfare il seguente criterio: Lo studente ha completato COURSE A e il certificato è scaduto"
 
@@ -86,4 +84,5 @@ IT "Impostazioni / Condizioni per l'accesso" -> "Lo studente DEVE soddisfare il 
 List of selectable courses
 --------------------------
 
-A course X is present in the dropdown menu in 'Settings / Restrict access' only if there is at least one record with the course code X in the 'local_recompletion_cc' table. In other words, there must be at least one user of course X whose completion has been removed using the plugin Course recompletion [local_recompletion](https://moodle.org/plugins/local_recompletion).
+A course X is present in the dropdown menu in 'Settings / Restrict access' only if there is at least one record with the course code X in the 'local_recompletion_cc' table.   
+In other words, there must be at least one user of course X whose completion has been removed using the plugin [Course recompletion](https://moodle.org/plugins/local_recompletion).
