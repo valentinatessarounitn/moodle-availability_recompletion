@@ -73,11 +73,16 @@ class condition extends \core_availability\condition {
     }
 
     /**
-     * save the plugin configuration to an activity.
+     * Save.
+     *
+     * @return object|\stdClass $result
      */
     public function save() {
 
-        $result = (object)array('type' => 'recompletion', 'course' => $this->courseid);
+        $result = (object)['type' => 'recompletion'];
+        if ($this->courseid) {
+            $result->cm = $this->courseid;
+        }
         return $result;
     }
 
