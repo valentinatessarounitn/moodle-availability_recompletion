@@ -28,12 +28,7 @@ $string['title'] = 'Recompletion';
 $string['requires_recompletion'] = 'The student has <strong>not</strong> completed <strong>{$a}</strong> in the past.<br/>Students who need to renew their expired certificate can attend the online course <strong>xyz</strong>.';
 $string['requires_notrecompletion'] = 'The student has already completed <strong>{$a}</strong> in the past.';
 $string['privacy:metadata'] = 'The Restriction by recompletion plugin does not store any personal data.';
-
-// Exceptions
 $string['error_selectcmid'] = 'You must select a course for the recompletion condition.';
-
-
-// js
 $string['label_start'] = 'Student has completed  ';
 $string['label_end'] = 'and the certification has expired';
 $string['this_course'] = 'this course';

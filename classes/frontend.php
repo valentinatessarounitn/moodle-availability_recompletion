@@ -24,8 +24,6 @@
 
  namespace availability_recompletion;
 
- defined('MOODLE_INTERNAL') || die();
-
 /**
  * Front-end class.
  *
@@ -33,19 +31,19 @@
  * @copyright 2024 Tessaro Valentina <valentina.tessaro@unitn.it>>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- class frontend extends \core_availability\frontend {
+class frontend extends \core_availability\frontend {
 
     /**
-     * returns frontend strings
+     * Returns frontend strings.
      */
     protected function get_javascript_strings() {
         // You can return a list of names within your language file and the
         // system will include them here.
-        return array('label_end', 'label_start', 'title', 'this_course');
+        return ['label_end', 'label_start', 'title', 'this_course'];
     }
 
     /**
-     * dummy function to make moodle happy
+     * Dummy function to make moodle happy.
      */
     protected function get_javascript_init_params(
         $course,
@@ -55,48 +53,49 @@
         // If you want, you can add some parameters here which will be
         // passed into your JavaScript init method. If you don't include
         // this function, there will be no parameters.
-        
         global $DB;
         $context = \context_course::instance($course->id);
 
-        // get all course names that are present in the recompletion table
-        $datcms = array();
+        // Get all course names that are present in the recompletion table.
+        $datcms = [];
 
-        // get the list of all courses with at least one user who has completed the course and has the possibility to recomplete it
-        $sql = "SELECT DISTINCT id, category, shortname FROM {course} 
+        // Get the list of all courses with at least one user who has completed the course and has the possibility to recomplete it.
+        $sql = "SELECT DISTINCT id, category, shortname FROM {course}
                 WHERE id IN (SELECT course FROM {local_recompletion_cc} WHERE timecompleted IS NOT NULL)
                 ORDER BY fullname ASC";
-
+        // Retrieve the list of courses.
         $other = $DB->get_records_sql($sql);
-
-
-
         foreach ($other as $othercm) {
 
-            if(($othercm->category > 0) && ($othercm->id == $course->id)){
-                // add the current course to the list with as 'this course'
+            if (($othercm->category > 0) && ($othercm->id == $course->id)) {
+                // Add the current course to the list with as 'this course'.
                 $thiscourse = get_string('this_course', 'availability_recompletion');
-                $datcms[] = (object)array(
+                $datcms[] = (object)[
                     'id' => $course->id,
-                    'name' => format_string($thiscourse, true, array('context' => $context))
-                );
+                    'name' => format_string($thiscourse, true, ['context' => $context]),
+                ];
             }
 
-            // disable not created course and default course
-            if(($othercm->category > 0) && ($othercm->id != $course->id)){
-                    $datcms[] = (object)array(
+            // Disable not created course and default course.
+            if (($othercm->category > 0) && ($othercm->id != $course->id)) {
+                    $datcms[] = (object)[
                         'id' => $othercm->id,
-                        'name' => format_string($othercm->shortname, true, array('context' => $context))
-                    );
+                        'name' => format_string($othercm->shortname, true, ['context' => $context]),
+                    ];
             }
         }
-
-        // Debug print
-        debugging('Frontend course available ' . print_r($datcms, true), DEBUG_NONE);
-
-        return array($datcms);
+        return [$datcms];
     }
 
+    /**
+     * Check if the condition can be added.
+     * Can only be added if there's at least one other module with recompletion info.
+     *
+     * @param \stdClass $course
+     * @param \cm_info|null $cm
+     * @param \section_info|null $section
+     * @return bool
+     */
     protected function allow_add(
         $course,
         \cm_info $cm = null,
@@ -110,6 +109,6 @@
 
         // Check if there's at least one other module with recompletion info.
         $params = $this->get_javascript_init_params($course, $cm, $section);
-        return ((array)$params[0]) != false;        
+        return ((array)$params[0]) != false;
     }
 }

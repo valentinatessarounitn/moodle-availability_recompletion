@@ -24,7 +24,6 @@
 
  namespace availability_recompletion;
 
- defined('MOODLE_INTERNAL') || die();
  use core_availability\info;
 
 /**
@@ -36,10 +35,10 @@
  */
 class condition extends \core_availability\condition {
 
-    // @var int ID of course that this condition requires
+    /** @var int ID of course that this condition requires */
     protected $courseid;
 
-    // @var bool whether the user has already completed the course and then removed it
+    /** @var bool whether the user has already completed the course and then removed it */
     protected $courserecompletion;
 
     /**
@@ -52,8 +51,6 @@ class condition extends \core_availability\condition {
         // structure is extracted from JSON data stored in the database
         // as part of the tree structure of conditions relating to an
         // activity or section.
-        // For example, you could obtain the 'allow' value:
-        //$this->allow = $structure->allow;
 
         // It is also a good idea to check for invalid values here and
         // throw a coding_exception if the structure is wrong.
@@ -64,12 +61,6 @@ class condition extends \core_availability\condition {
         } else {
             throw new \coding_exception('Invalid course ID: null or non-integer value');
         }
-
-        // Debug print
-        // debugging('structure: ' . print_r($structure, true), DEBUG_NONE);
-        // echo '<br>inside init<br>';
-        // echo 'courseid: ' . $this->courseid;
-        // debugging('Course ID: ' . $this->courseid, DEBUG_NORMAL);
     }
 
     /**
@@ -86,8 +77,8 @@ class condition extends \core_availability\condition {
         return $result;
     }
 
-     /**
-     * verifies whether a student has already completed the corse and then removed or not.
+    /**
+     * Verifies whether a student has already completed the corse and then removed or not.
      *
      * @param boolval $not - whether or not to negate the result
      * @param \core_availability\info $info
@@ -101,32 +92,30 @@ class condition extends \core_availability\condition {
         $userid
     ): bool {
         global $DB;
-
         $course = $this->courseid;
 
-        // Debug print
-        // echo '<br>inside is_available';
-        // echo '<br> courseid: ' . $course;
-        // echo '<br> userid ' . $userid;
-
-        // $courserecompletion is true if the user with id === userid has already completed the course with id === $course in the past and then removed it.
-        $this->courserecompletion = $DB->record_exists_select('local_recompletion_cc', 'userid = ? and course = ? and timecompleted IS NOT NULL', array($userid, $course));
-        
+        // The plugin local_recompletion store in the DB table local_recompletion_cc the information
+        // about the user who has completed the course and then removed it.
+        $filter = 'userid = ? and course = ? and timecompleted IS NOT NULL';
+        $this->courserecompletion = $DB->record_exists_select('local_recompletion_cc', $filter, [$userid, $course]);
+        // Bool $courserecompletion is true if the user with id === userid has already completed
+        // the course with id === $course in the past and then removed it.
         $allow = $this->courserecompletion;
-
         if ($not) {
             $allow = !$allow;
         }
-        
-        // Debug print
-        //debugging('Checking recompletion condition for user ' . $userid . ' has already completed in the past the course ' . $course . ': ' . ($this->courserecompletion ? 'YES' : 'NO'), DEBUG_NONE);
-
-        // echo '<br> User ' . $userid . ' has already completed in the past the course ' . $course . '? ';
-        // echo '<br> ' . ($this->courserecompletion ? 'YES' : 'NO');
-        
         return $allow;
     }
 
+    /**
+     * Retrieve the description for the restriction.
+     *
+     * @param bool                    $full
+     * @param bool                    $not
+     * @param \core_availability\info $info
+     *
+     * @return string
+     */
     public function get_description(
         $full,
         $not,
@@ -140,41 +129,32 @@ class condition extends \core_availability\condition {
 
         global $DB;
 
-        $name = get_string('this_course', 'availability_recompletion'); // default value is 'this course'
+        // Default value is 'this course'.
+        $name = get_string('this_course', 'availability_recompletion');
 
-        // when the condition is set on a course different from the current one, 
+        // When the condition is set on a course different from the current one,
         // instead of using 'this course' I use the name of the course on which the constraint was applied.
-        if($info->get_course()->id != $this->courseid && $this->courseid != NULL) {
+        if ($info->get_course()->id != $this->courseid && $this->courseid != null) {
 
             $sqlcourseobj = "SELECT * FROM {course} WHERE id = $this->courseid LIMIT 1";
             $courseobj = $DB->get_record_sql($sqlcourseobj);
             $name = $courseobj->fullname;
         }
 
-        // $not == true => in Access restrictions the condition is set to 'Student must not match the following'.
+        // If $not == true => in Access restrictions the condition is set to 'Student must not match the following'.
         $requireornot = $not ? 'requires_recompletion' : 'requires_notrecompletion';
         return get_string($requireornot, 'availability_recompletion', $name);
     }
 
+    /**
+     * Retrieve debugging string.
+     *
+     * @return string
+     */
     protected function get_debug_string() {
         // This function is only normally used for unit testing and
         // stuff like that. Just make a short string representation
         // of the values of the condition, suitable for developers.
-        //return $this->allow ? 'YES' : 'NO';
-        return $this-> courseid . ' : ' . ($this->courserecompletion ? 'YES' : 'NO');
+        return $this->courseid . ' : ' . ($this->courserecompletion ? 'YES' : 'NO');
     }
-
-     /**
-     * Returns a JSON object which corresponds to a condition of this type.
-     *
-     * Intended for unit testing, as normally the JSON values are constructed
-     * by JavaScript code.
-     *
-     * @param int $courseid Course id of other activity
-     */
-    /*
-    public static function get_json($courseid) {
-        return (object)array('type' => 'recompletion', 'cm' => (int)$courseid);
-    }*/
-    
 }
