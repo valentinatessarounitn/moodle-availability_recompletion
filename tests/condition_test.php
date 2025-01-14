@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+namespace availability_recompletion;
+
 use core_availability\info;
 use core_availability\info_module;
 use core_availability\info_section;
@@ -27,7 +29,7 @@ use PHPUnit\Framework\TestCase;
  * @copyright   2024 Tessaro Valentina <valentina.tessaro@unitn.it>>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class condition_test extends advanced_testcase {
+class condition_test extends \advanced_testcase {
 
     /**
      * Setup to ensure that fixtures are loaded.
