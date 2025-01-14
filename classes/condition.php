@@ -22,7 +22,7 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- namespace availability_recompletion;
+namespace availability_recompletion;
 
  use core_availability\info;
 
@@ -45,6 +45,7 @@ class condition extends \core_availability\condition {
      * Constructor.
      *
      * @param \stdClass $structure Data structure from JSON decode
+     * @throws \coding_exception If invalid data structure.
      */
     public function __construct($structure) {
         // Retrieve any necessary data from the $structure here. The
@@ -138,7 +139,9 @@ class condition extends \core_availability\condition {
 
             $sqlcourseobj = "SELECT * FROM {course} WHERE id = $this->courseid LIMIT 1";
             $courseobj = $DB->get_record_sql($sqlcourseobj);
-            $name = $courseobj->fullname;
+
+            // Print the id of the course if the course is not found.
+            $name = $courseobj != null && $courseobj->fullname != null ? $courseobj->fullname : $this->courseid;
         }
 
         // If $not == true => in Access restrictions the condition is set to 'Student must not match the following'.
