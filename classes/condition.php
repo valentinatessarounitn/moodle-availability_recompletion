@@ -18,7 +18,7 @@
  * Plugin version and other meta-data are defined here.
  *
  * @package     availability_recompletion
- * @copyright   2024 Tessaro Valentina <valentina.tessaro@unitn.it>>
+ * @copyright   2025 Tessaro Valentina <valentina.tessaro@unitn.it>>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ namespace availability_recompletion;
  * Condition main class.
  *
  * @package availability_recompletion
- * @copyright 2024 Tessaro Valentina <valentina.tessaro@unitn.it>>
+ * @copyright 2025 Tessaro Valentina <valentina.tessaro@unitn.it>>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class condition extends \core_availability\condition {

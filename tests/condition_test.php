@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
  * Unit tests for the recompletion condition.
  *
  * @package     availability_recompletion
- * @copyright   2024 Tessaro Valentina <valentina.tessaro@unitn.it>>
+ * @copyright   2025 Tessaro Valentina <valentina.tessaro@unitn.it>>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class condition_test extends \advanced_testcase {
