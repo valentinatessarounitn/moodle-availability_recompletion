@@ -98,3 +98,19 @@ List of selectable courses
 
 A course X is present in the dropdown menu in 'Settings / Restrict access' only if there is at least one record with the course code X in the 'local_recompletion_cc' table.   
 In other words, there must be at least one user of course X whose completion has been removed using the plugin [Course recompletion](https://moodle.org/plugins/local_recompletion).
+
+
+Dependencies 
+------------
+
+The plugin [local_recompletion](https://moodle.org/plugins/local_recompletion) records all the data of users whose completion is canceled on 3 tables:
+```
+<TABLE NAME="local_recompletion_cc" COMMENT="archive of course_completions table"> 
+<TABLE NAME="local_recompletion_cc_cc" COMMENT="archive of course_completion_crit_compl">
+<TABLE NAME="local_recompletion_cmc" COMMENT="archive of course_modules_completion table"> 
+```
+
+This plugin only reads the data present in the "local_recompletion_cc" table.   
+If in the future the table used by the local_recompletion plugin changes then must be modified the two queries present in the methods:   
+- class condition, function is_available
+- class frontend, function get_javascript_init_params
