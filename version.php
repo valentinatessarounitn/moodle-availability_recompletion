@@ -28,4 +28,6 @@ $plugin->component = 'availability_recompletion';
 $plugin->release = '0.1.0';
 $plugin->version = 2024111900;
 $plugin->requires = 2022112800;
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->maturity = MATURITY_STABLE;
+$plugin->supported = [401, 401];
+$plugin->dependencies = ['local_recompletion' => 2023112707];
