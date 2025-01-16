@@ -74,11 +74,11 @@ After installing the plugin, it is ready to use without the need for any configu
 
 Teachers (and other users with editing rights) can add the "Recompletion" availability condition to activities in their courses. While adding the condition, they have to define the course to which the recompletion refers.
 
-As Moodle admin, you have already created two course: in-person (course A) and renewal course (course B).
+As Moodle admin, you have already created two course: in-person (course A) and renewal (course B).
 
 ### Course A
 
-The administrator must restrict the enrollment activities for the in-person lessons of course A to students who are taking the course for the first time.
+The administrator/teacher must restrict the enrollment activities for the in-person lessons of course A to students who are taking the course for the first time.
 
 The teacher, when adding a new choicegroup activity for "Prenotazione edizione x", in "Settings / Restrict access" must add "Student Restriction type MUST NOT match the following: Student has completed THIS COURSE and the certification has expired."
 
@@ -86,7 +86,7 @@ IT "Impostazioni / Condizioni per l'accesso" -> "Lo studente NON DEVE soddisfare
 
 ### Course B
 
-The administrator must restrict the activities of course B to students who only need to renew the certificate.
+The administrator/teacher must restrict the activities of course B to students who only need to renew the certificate.
 
 The teacher, in "Settings / Restrict access" for individual activities, must add "Student Restriction type MUST match the following: Student has completed COURSE A and the certification has expired."
 

@@ -34,7 +34,9 @@
 class frontend extends \core_availability\frontend {
 
     /**
-     * Returns frontend strings.
+     * Gets a list of string identifiers (in the plugin's language file) that are required in JavaScript for this plugin.
+     *
+     * @return Array of required string identifiers
      */
     protected function get_javascript_strings() {
         // You can return a list of names within your language file and the
@@ -43,7 +45,13 @@ class frontend extends \core_availability\frontend {
     }
 
     /**
-     * Dummy function to make moodle happy.
+     * Delivers parameters to the javascript part of the plugin.
+     * The returned array consists of id and shortname of the course that can be recompleted.
+     *
+     * @param  \stdClass $course Course object
+     * @param  ?\cm_info $cm Course-module currently being edited (null if none)
+     * @param  ?\section_info $section Section currently being edited (null if none)
+     * @return array Array of parameters for the JavaScript function
      */
     protected function get_javascript_init_params(
         $course,
@@ -59,7 +67,8 @@ class frontend extends \core_availability\frontend {
         // Get all course names that are present in the recompletion table.
         $datcms = [];
 
-        // Get the list of all courses with at least one user who has completed the course and has the possibility to recomplete it.
+        // Get the list of all courses with at least one user who has 
+        // completed the course and has the possibility to recomplete it.
         $sql = "SELECT DISTINCT id, category, shortname FROM {course}
                 WHERE id IN (SELECT course FROM {local_recompletion_cc} WHERE timecompleted IS NOT NULL)
                 ORDER BY fullname ASC";
@@ -89,7 +98,7 @@ class frontend extends \core_availability\frontend {
 
     /**
      * Check if the condition can be added.
-     * Can only be added if there's at least one other module with recompletion info.
+     * Can only be added if there's at least one course with recompletion info.
      *
      * @param \stdClass $course
      * @param \cm_info|null $cm
@@ -107,7 +116,7 @@ class frontend extends \core_availability\frontend {
         // the user interface. If you don't include this function, it will
         // appear.
 
-        // Check if there's at least one other module with recompletion info.
+        // Check if there's at least one course with recompletion info.
         $params = $this->get_javascript_init_params($course, $cm, $section);
         return ((array)$params[0]) != false;
     }
