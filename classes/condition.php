@@ -24,7 +24,7 @@
 
 namespace availability_recompletion;
 
- use core_availability\info;
+use core_availability\info;
 
 /**
  * Condition main class.

@@ -67,7 +67,7 @@ class frontend extends \core_availability\frontend {
         // Get all course names that are present in the recompletion table.
         $datcms = [];
 
-        // Get the list of all courses with at least one user who has 
+        // Get the list of all courses with at least one user who has
         // completed the course and has the possibility to recomplete it.
         $sql = "SELECT DISTINCT id, category, shortname FROM {course}
                 WHERE id IN (SELECT course FROM {local_recompletion_cc} WHERE timecompleted IS NOT NULL)
