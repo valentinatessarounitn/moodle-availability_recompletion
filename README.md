@@ -48,8 +48,20 @@ Gli studenti che hanno già frequentato il corso e a cui è scaduto il certifica
 Installation
 ------------
 
-Install the plugin like any other plugin to folder
-/availability/condition/recompletion
+Install the plugin like any other plugin to folder moodle/availability/condition/recompletion.   
+
+The folder structure should therefore be:
+```
+| moodle
+  |-- availability
+    |-- condition
+      |-- recompletion
+        |-- classes
+        |-- lang
+        |-- tests
+        |-- yui
+        ...                
+```      
 
 See http://docs.moodle.org/en/Installing_plugins for details on installing Moodle plugins
 
