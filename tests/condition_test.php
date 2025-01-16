@@ -21,6 +21,7 @@ use core_availability\info_module;
 use core_availability\info_section;
 use availability_recompletion\condition;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * Unit tests for the recompletion condition.
@@ -31,8 +32,20 @@ use PHPUnit\Framework\TestCase;
  */
 class condition_test extends \advanced_testcase {
 
+    /** @var stdClass inpersoncourse. */
+    private $inpersoncourse;
+
+    /** @var stdClass renewalcourse. */
+    private $renewalcourse;
+
+    /** @var stdClass inpersonuser. */
+    private $inpersonuser;
+
+    /** @var stdClass renewaluser. */
+    private $renewaluser;
+
     /**
-     * Setup to ensure that fixtures are loaded.
+     * Create course and page.
      */
     public function setUp(): void {
         global $CFG;
@@ -44,15 +57,17 @@ class condition_test extends \advanced_testcase {
         require_once($CFG->dirroot . '/availability/tests/fixtures/mock_info_section.php');
         require_once($CFG->libdir . '/completionlib.php');
         $this->resetAfterTest();
-        $this->setAdminUser();
-        $CFG->enablecompletion = true;
         $CFG->enableavailability = true;
         set_config('enableavailability', true);
         $dg = $this->getDataGenerator();
-        $now = time();
-        $this->course = $dg->create_course(['startdate' => $now, 'enddate' => $now + 7 * WEEKSECS, 'enablecompletion' => 1]);
-        $this->user = $dg->create_user(['timezone' => 'UTC']);
-        $dg->enrol_user($this->user->id, $this->course->id, 5, time());
+
+        // Create two courses.
+        $this->inpersoncourse = $dg->create_course();
+        $this->renewalcourse = $dg->create_course();
+
+        // Create two users as students.
+        $this->inpersonuser = $dg->create_user();
+        $this->renewaluser = $dg->create_user();
     }
 
     /**
@@ -105,6 +120,7 @@ class condition_test extends \advanced_testcase {
         $structure = (object)['cm' => 'a'];
         try {
             $cond = new condition($structure);
+            $this->fail();
         } catch (\coding_exception $exception) {
             $this->assertEquals(0, $exception->getCode());
             $this->assertEquals($msg, $exception->getMessage());
@@ -126,5 +142,68 @@ class condition_test extends \advanced_testcase {
         $structure->cm = 4562;
         $cond = new condition($structure);
         $this->assertEquals('{recompletion:4562 : NO}', (string)$cond);
+    }
+
+    /**
+     * Tests whether description is correct
+     * @covers \availability_recompletion\condition::get_description()
+     * @return void
+     */
+    public function test_get_description(): void {
+        $info = new \core_availability\mock_info();
+
+        // Test course inpersoncourse.
+        $requiresrecompletion = '~has <strong>not</strong> completed <strong>'.$this->inpersoncourse->fullname.'</strong>~';
+        $notrequiresrecompletion = '~has already completed <strong>'.$this->inpersoncourse->fullname.'</strong>~';
+        $structure = (object)['type' => 'recompletion', 'cm' => $this->inpersoncourse->id];
+        $cond = new condition($structure);
+        $description = $cond->get_description(true, false, $info);
+        $this->assertMatchesRegularExpression($notrequiresrecompletion, $description);
+        $description = $cond->get_description(true, true, $info);
+        $this->assertMatchesRegularExpression($requiresrecompletion, $description);
+
+        // Test course inpersoncourse.
+        $requiresrecompletion = '~has <strong>not</strong> completed <strong>'.$this->renewalcourse->fullname.'</strong>~';
+        $notrequiresrecompletion = '~has already completed <strong>'.$this->renewalcourse->fullname.'</strong>~';
+        $structure = (object)['type' => 'recompletion', 'cm' => $this->renewalcourse->id];
+        $cond = new condition($structure);
+        $description = $cond->get_description(true, false, $info);
+        $this->assertMatchesRegularExpression($notrequiresrecompletion, $description);
+        $description = $cond->get_description(true, true, $info);
+        $this->assertMatchesRegularExpression($requiresrecompletion, $description);
+    }
+
+    /**
+     * Tests whether activity is available or not
+     * @covers \availability_dedicationtime\condition
+     * @return void
+     */
+    public function test_is_available(): void {
+        global $DB;
+
+        // Write in DB that the user inpersonuser has completed the course and then removed it.
+        $data = new stdClass();
+        $data->userid = $this->inpersonuser->id;
+        $data->course = $this->inpersoncourse->id;
+        $data->timecompleted = time();
+        $DB->insert_record('local_recompletion_cc', $data);
+
+        $rec = ['course' => $data->course];
+        $page = $this->getDataGenerator()->get_plugin_generator('mod_page')->create_instance($rec);
+        $info = new \core_availability\mock_info($this->inpersoncourse, $this->inpersonuser->id);
+
+        // Create the condition access.
+        $structure = (object)['type' => 'recompletion', 'cm' => $this->inpersoncourse->id];
+        $cond = new condition($structure);
+
+        // User inpersonuser has completed the course inpersoncourse and was removed.
+        $this->assertTrue($cond->is_available(false, $info, false, $this->inpersonuser->id));
+
+        // User renewaluser never completed the course inpersoncourse.
+        $this->assertFalse($cond->is_available(false, $info, false, $this->renewaluser->id));
+
+         // Test "this course": the condition is set for the course inperson and the user is inside the same course.
+        $description = $cond->get_description(true, false, $info);
+        $this->assertMatchesRegularExpression('~already completed <strong>this course</strong>~', $description);
     }
 }
