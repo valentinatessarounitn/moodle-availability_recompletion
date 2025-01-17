@@ -41,7 +41,7 @@ class frontend extends \core_availability\frontend {
     protected function get_javascript_strings() {
         // You can return a list of names within your language file and the
         // system will include them here.
-        return ['label_end', 'label_start', 'title', 'this_course'];
+        return ['label', 'title', 'this_course'];
     }
 
     /**

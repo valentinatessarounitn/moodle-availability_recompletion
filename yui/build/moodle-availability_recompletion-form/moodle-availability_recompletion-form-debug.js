@@ -25,19 +25,19 @@ YUI.add('moodle-availability_recompletion-form', function (Y, NAME) {
     
     M.availability_recompletion.form.getNode = function(json) {
         // Create HTML structure.
-        var html =  '<span class="col-form-label p-r-1"> ' + M.util.get_string('title', 'availability_recompletion') + ' </span>' +
-                    '<span class="availability-group form-group"><label>' +
-                    M.util.get_string('label_start', 'availability_recompletion') +
-                    ' <select class="custom-select" name="cm" style="margin-left:10px;margin-right:10px">' +
-                    '<option value="0">' + M.util.get_string('choosedots', 'moodle') + '</option>';
+        var html =  '<span class="col-form-label p-r-1"> ' + M.util.get_string('title', 'availability_recompletion') + ' </span><br/>' +
+        '<label>' + M.util.get_string('label', 'availability_recompletion') +
+        ' <select class="custom-select" name="cm" style="margin-right:20px">' +
+        '<option value="0">' + M.util.get_string('choosedots', 'moodle') + '</option>';
+
         for (var i = 0; i < this.datcms.length; i++) {
             var cm = this.datcms[i];
             // String has already been escaped using format_string.
             html += '<option value="' + cm.id + '">' + cm.name + '</option>';
         }
-        html += '</select></label>'
-        html += '<br/><label>' + M.util.get_string('label_end', 'availability_recompletion') + ' </label></span>';
-        var node = Y.Node.create('<span class="form-inline">' + html + '</span>');
+
+        html += '</select></label></span>';
+        var node = Y.Node.create('<div class="d-inline-block form-inline">' + html + '</div>');
     
         // Set initial values.
         if (json.cm !== undefined &&

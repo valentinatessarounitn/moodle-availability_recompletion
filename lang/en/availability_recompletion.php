@@ -22,13 +22,12 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['description'] = 'Exclude or limit to students who have already completed the course and have been removed due to certificate expiration.';
+$string['description'] = 'Exclude or limit to students who have undone course completion.';
 $string['pluginname'] = 'Restriction by recompletion';
 $string['title'] = 'Recompletion';
-$string['requires_recompletion'] = 'The student has <strong>not</strong> completed <strong>{$a}</strong> in the past.';
-$string['requires_notrecompletion'] = 'The student has already completed <strong>{$a}</strong> in the past.';
+$string['requires_recompletion'] = 'The student <strong>must not</strong> have undone the completion of <strong>{$a}</strong>.';
+$string['requires_notrecompletion'] = 'The student must have undone the completion of <strong>{$a}</strong>.';
 $string['privacy:metadata'] = 'The Restriction by recompletion plugin does not store any personal data.';
 $string['error_selectcmid'] = 'You must select a course for the recompletion condition.';
-$string['label_start'] = 'Student has completed  ';
-$string['label_end'] = 'and the certification has expired';
+$string['label'] = ' Must have undone the course completion ';
 $string['this_course'] = 'this course';

@@ -22,13 +22,12 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['description'] = 'Escludi o limita agli studenti che hanno già completato il corso e sono stati rimossi a causa della scadenza del certificato.';
-$string['pluginname'] = 'Restrizione per ricompletamento';
+$string['description'] = 'Escludi o limita agli studenti che hanno un completamento corso annullato.';
+$string['pluginname'] = 'Criterio basato sul ricompletamento';
 $string['title'] = 'Ricompletamento';
-$string['requires_recompletion'] = 'Lo studente <strong>non</strong> ha completato <strong>{$a}</strong> in passato.';
-$string['requires_notrecompletion'] = 'Lo studente ha già completato <strong>{$a}</strong> in passato.';
+$string['requires_recompletion'] = 'Lo studente <strong>non</strong> deve avere il completamento annullato di <strong>{$a}</strong>.';
+$string['requires_notrecompletion'] = 'Lo studente deve avere il completamento annullato di <strong>{$a}</strong>.';
 $string['privacy:metadata'] = 'Il plugin Restrizione per ricompletamento non memorizza alcun dato personale.';
 $string['error_selectcmid'] = 'Devi selezionare un corso per la condizione di ricompletamento.';
-$string['label_start'] = 'Lo studente ha completato ';
-$string['label_end'] = 'e il certificato è scaduto';
+$string['label'] = ' Deve aver annullato il completamento del corso ';
 $string['this_course'] = 'questo corso';
