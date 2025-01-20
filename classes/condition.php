@@ -146,7 +146,12 @@ class condition extends \core_availability\condition {
 
         // If $not == true => in Access restrictions the condition is set to 'Student must not match the following'.
         $requireornot = $not ? 'requires_recompletion' : 'requires_notrecompletion';
-        return get_string($requireornot, 'availability_recompletion', $name);
+
+        // Courseobj->fullname can contains the whole {mlang XX} ... {mlang} tags and different language strings.
+        // With format_string only the translation of the language set by the user is shown.
+        $context = \context_course::instance($this->courseid);
+        $nametranslated = format_string($name, true, ['context' => $context]);
+        return get_string($requireornot, 'availability_recompletion', $nametranslated);
     }
 
     /**
