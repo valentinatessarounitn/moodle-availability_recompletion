@@ -80,17 +80,17 @@ As Moodle admin, you have already created two course: in-person (course A) and r
 
 The administrator/teacher must restrict the enrollment activities for the in-person lessons of course A to students who are taking the course for the first time.
 
-The teacher, when adding a new choicegroup activity for "Prenotazione edizione x", in "Settings / Restrict access" must add "Student Restriction type MUST NOT match the following: Student has completed THIS COURSE and the certification has expired."
+The teacher, when adding a new choicegroup activity for "Prenotazione edizione x", in "Settings / Restrict access" must add "Student Restriction type MUST NOT match the following: Must have undone the course completion THIS COURSE".
 
-IT "Impostazioni / Condizioni per l'accesso" -> "Lo studente NON DEVE soddisfare il seguente criterio: Lo studente ha completato QUESTO CORSO e il certificato è scaduto"
+IT "Impostazioni / Condizioni per l'accesso" -> "Lo studente NON DEVE soddisfare il seguente criterio: Deve aver annullato il completamento del corso QUESTO CORSO".
 
 ### Course B
 
 The administrator/teacher must restrict the activities of course B to students who only need to renew the certificate.
 
-The teacher, in "Settings / Restrict access" for individual activities, must add "Student Restriction type MUST match the following: Student has completed COURSE A and the certification has expired."
+The teacher, in "Settings / Restrict access" for individual activities, must add "Student Restriction type MUST match the following: Must have undone the course completion COURSE A".
 
-IT "Impostazioni / Condizioni per l'accesso" -> "Lo studente DEVE soddisfare il seguente criterio: Lo studente ha completato COURSE A e il certificato è scaduto"
+IT "Impostazioni / Condizioni per l'accesso" -> "Lo studente DEVE soddisfare il seguente criterio: Deve aver annullato il completamento del corso COURSE A".
 
 
 List of selectable courses
