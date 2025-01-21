@@ -1,7 +1,7 @@
 moodle-availability_recompletion
 ========================
 
-Moodle availability plugin which lets users restrict resources and activities based on recompletion of the selected course.
+Moodle availability plugin which lets users restrict resources, activities and sections based on recompletion of the selected course.
 
 
 Requirements
@@ -14,35 +14,13 @@ This plugin requires the plugin Course recompletion [local_recompletion](https:/
 Motivation for this plugin
 --------------------------
 
-### EN
+The plugin Course recompletion [local_recompletion](https://moodle.org/plugins/local_recompletion) allows clearing all course and activity completion for a user based on the duration set notifying the student they need to return to the course and recomplete it.
 
-This plugin is designed to manage enrollments for the "Corso Sicurezza sul Luogo di Lavoro - Rischio MEDIO".
-Upon certificate expiration (5 years), users are automatically removed from the safety course using the recompletion plugin.
+The problem is that, once the completion is removed, it is no longer possible to distinguish between users who have never completed the course and users who have completed the course but their completion has been removed.
 
-Once removed, it is no longer possible to distinguish between new users and those who need to renew it.
-
-Users taking the course for the first time must do so in-person in the classroom.
-Students who need to renew the certificate can do so only online.
-
-This plugin allows distinguishing between users who have never completed the course and those who have completed it at least once but whose certificate has expired.
-
-Students who have never completed the course will be able to access the activity that allows enrollment in the in-person course.
-Students who have already taken the course and whose certificate has expired and need to retake the course will not be able to access the activity that allows enrollment in the in-person course. However, they will be able to enroll in and access the activities of a different course that does not require classroom attendance.
-
-### IT
-
-Questo plugin è stato pensato per gestire le iscrizioni al "Corso Sicurezza sul Luogo di Lavoro - Rischio MEDIO".    
-Alla scadenza del certificato (5 anni) gli utenti vengono rimossi automaticamente dal corso di sicurezza usando il plugin recompletion. 
-
-Una volta rimossi non è più possibile distinguere tra gli utenti nuovi e quelli che devono rinnovarlo.
-
-Gli utenti che frequentano il corso per la prima volta devono farlo in presenza in aula.   
-Gli studenti che devono rinnovare il certificato possono farlo solo online.
- 
-Questo plugin permette di distinguere tra gli utenti che non hanno mai completato il corso e quelli che hanno già completato il corso almeno una volta ma il cui certificato è scaduto.
-
-Gli studenti che non hanno mai completato il corso potranno accedere all'attività che permette l'iscrizione al corso in presenza.   
-Gli studenti che hanno già frequentato il corso e a cui è scaduto il certificato e devono rifare il corso non potranno accedere all'attività che permette l'iscrizione al corso in presenza. Ma potranno eventualmente iscriversi e accedere alle attività di un differente corso che non prevede la presenza in aula.  
+This plugin allows you to:
+- show or hide elements only for users who have never completed the course
+- show or hide elements only for users who have completed the course and their completion has been removed.
 
 
 Installation
@@ -66,9 +44,59 @@ The folder structure should therefore be:
 See http://docs.moodle.org/en/Installing_plugins for details on installing Moodle plugins
 
 
+List of selectable courses
+--------------------------
+
+A course X is present in the dropdown menu in 'Settings / Restrict access' if:
+- recompletion has been enabled for course X
+- there is at least one user of course X whose completion has been removed using the plugin [Course recompletion](https://moodle.org/plugins/local_recompletion)
+
+
+Dependencies 
+------------
+
+The plugin [local_recompletion](https://moodle.org/plugins/local_recompletion) records all the data in tables whose names start with `local_recompletion_`.
+
+This plugin only reads the data present in the `local_recompletion_cc` and `local_recompletion_config` tables.
+If in the future the table used by the local_recompletion plugin changes then must be modified the two queries present in the methods:   
+- class condition, function is_available
+- class frontend, function get_javascript_init_params
+
+
+Example
+-------
+
+### EN
+
+Upon certificate expiration, users are automatically removed from the safety course using the recompletion plugin.
+
+Once removed, it is no longer possible to distinguish between new users and those who need to renew it.
+
+Users taking the course for the first time must do so in-person in the classroom.
+Students who need to renew the certificate can do so only online.
+
+This plugin allows distinguishing between users who have never completed the course and those who have completed it at least once but whose certificate has expired.
+
+Students who have never completed the course will be able to access the activity that allows enrollment in the in-person course.
+Students who have already taken the course and whose certificate has expired and need to retake the course will not be able to access the activity that allows enrollment in the in-person course. However, they will be able to enroll in and access the activities of a different course that does not require classroom attendance.
+
+### IT
+ 
+Alla scadenza del certificato gli utenti vengono rimossi automaticamente dal corso di sicurezza usando il plugin recompletion. 
+
+Una volta rimossi non è più possibile distinguere tra gli utenti nuovi e quelli che devono rinnovarlo.
+
+Gli utenti che frequentano il corso per la prima volta devono farlo in presenza in aula.   
+Gli studenti che devono rinnovare il certificato possono farlo solo online.
+ 
+Questo plugin permette di distinguere tra gli utenti che non hanno mai completato il corso e quelli che hanno già completato il corso almeno una volta ma il cui certificato è scaduto.
+
+Gli studenti che non hanno mai completato il corso potranno accedere all'attività che permette l'iscrizione al corso in presenza.   
+Gli studenti che hanno già frequentato il corso e a cui è scaduto il certificato e devono rifare il corso non potranno accedere all'attività che permette l'iscrizione al corso in presenza. Potranno eventualmente iscriversi e accedere alle attività di un differente corso che non prevede la presenza in aula. 
+
+
 Usage & Settings
 ----------------
-
 
 After installing the plugin, it is ready to use without the need for any configuration.
 
@@ -86,31 +114,8 @@ IT "Impostazioni / Condizioni per l'accesso" -> "Lo studente NON DEVE soddisfare
 
 ### Course B
 
-The administrator/teacher must restrict the activities of course B to students who only need to renew the certificate.
+The administrator/teacher must restrict the activities of course B to students who, for example, only need to renew the certificate.
 
 The teacher, in "Settings / Restrict access" for individual activities, must add "Student Restriction type MUST match the following: Must have undone the course completion COURSE A".
 
 IT "Impostazioni / Condizioni per l'accesso" -> "Lo studente DEVE soddisfare il seguente criterio: Deve aver annullato il completamento del corso COURSE A".
-
-
-List of selectable courses
---------------------------
-
-A course X is present in the dropdown menu in 'Settings / Restrict access' only if there is at least one record with the course code X in the 'local_recompletion_cc' table.   
-In other words, there must be at least one user of course X whose completion has been removed using the plugin [Course recompletion](https://moodle.org/plugins/local_recompletion).
-
-
-Dependencies 
-------------
-
-The plugin [local_recompletion](https://moodle.org/plugins/local_recompletion) records all the data of users whose completion is canceled on 3 tables:
-```
-<TABLE NAME="local_recompletion_cc" COMMENT="archive of course_completions table"> 
-<TABLE NAME="local_recompletion_cc_cc" COMMENT="archive of course_completion_crit_compl">
-<TABLE NAME="local_recompletion_cmc" COMMENT="archive of course_modules_completion table"> 
-```
-
-This plugin only reads the data present in the "local_recompletion_cc" table.   
-If in the future the table used by the local_recompletion plugin changes then must be modified the two queries present in the methods:   
-- class condition, function is_available
-- class frontend, function get_javascript_init_params
