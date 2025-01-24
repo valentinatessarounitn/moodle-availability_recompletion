@@ -41,6 +41,8 @@ The folder structure should therefore be:
         ...                
 ```      
 
+After installing the plugin, it is ready to use without the need for any configuration.   
+
 See http://docs.moodle.org/en/Installing_plugins for details on installing Moodle plugins
 
 
@@ -68,54 +70,64 @@ Example
 
 ### EN
 
-Upon certificate expiration, users are automatically removed from the safety course using the recompletion plugin.
+Let's assume we have created a `course A` that generates a certificate/badge valid for 2 years and we decide to automatically cancel the course completion after 2 years using the [Course recompletion](https://moodle.org/plugins/local_recompletion) plugin.     
+The cancellation of `course A` allows us to have an updated report of the students who still have that course valid.
 
-Once removed, it is no longer possible to distinguish between new users and those who need to renew it.
+After the cancellation of the course, we might want to:
+- prevent the repetition of `course A` and/or
+- show different activities within `course A` and/or
+- provide a `course B` with update activities reserved only for students who had completed `course A`.
 
-Users taking the course for the first time must do so in-person in the classroom.
-Students who need to renew the certificate can do so only online.
+By enabling the `Archive completion data` flag in the [Course recompletion](https://moodle.org/plugins/local_recompletion) plugin for `course A`, the data on canceled completions is archived in a separate table. However, it is not possible to interact with this data from the Moodle interface and, in particular, it is not possible to activate completion conditions.
 
-This plugin allows distinguishing between users who have never completed the course and those who have completed it at least once but whose certificate has expired.
+This plugin helps us by allowing us to distinguish between users who have never completed the course and those who have completed the course at least once but whose completion has expired, based on the archived recompletion data.   
+It is therefore possible to set activities/resources/sections of the course with visibility conditioned by the canceled completion of the course.
 
-Students who have never completed the course will be able to access the activity that allows enrollment in the in-person course.
-Students who have already taken the course and whose certificate has expired and need to retake the course will not be able to access the activity that allows enrollment in the in-person course. However, they will be able to enroll in and access the activities of a different course that does not require classroom attendance.
+For example, if the student has never completed `course A` or has completed it but it has not expired:
+- they should be able to see the contents of `course A`;
+- the contents of the update `course B` are hidden;
+- an informative text area could be inserted in `course B` indicating to the student the need to refer to `course A`.
+
+Or, if the student has completed `course A` but the completion has expired:
+- they should be able to see the contents of `course B`;
+- some activities/resources of `course A` (e.g., final quiz, certificate) should be hidden;
+- an informative text area could be inserted in `course A` indicating to the student the link to enroll in the update `course B`.
+
+All the configuration hypothesized here for courses A and B could be thought of in a single course, adding the sections of `course B` directly into `course A` and showing the contents of the base course and the update course based on the described conditions.    
+The choice of whether to create two separate courses or a single course could be made, for example, based on:
+- educational issues (e.g., different teachers);
+- not overloading a course if there is a lot of content;
+- if we want different reporting between those who have taken the base course and those who have taken the update;
+- if we want to issue different badges depending on the type of course completed.
 
 ### IT
  
-Alla scadenza del certificato gli utenti vengono rimossi automaticamente dal corso di sicurezza usando il plugin recompletion. 
+Ipotizziamo di avere creato un `corso A` che genera un certificato/badge valevole per 2 anni e decidiamo di annullare automaticamente dopo 2 anni il completamento del corso tramite plugin [Course recompletion](https://moodle.org/plugins/local_recompletion).     
+L'annullamento del `corso A` ci permette di avere un report aggiornato degli studenti che hanno quel corso ancora valido.
 
-Una volta rimossi non è più possibile distinguere tra gli utenti nuovi e quelli che devono rinnovarlo.
+Dopo l'annullamento, del corso potremmo voler:
+- impedire la ripetizione del `corso A` e/o
+- mostrare delle attività differenti all'interno del `corso A` e/o
+- mettere a disposizione un `corso B` con delle attività di aggiornamento riservate ai soli studenti che avevano completato il `corso A`.
 
-Gli utenti che frequentano il corso per la prima volta devono farlo in presenza in aula.   
-Gli studenti che devono rinnovare il certificato possono farlo solo online.
- 
-Questo plugin permette di distinguere tra gli utenti che non hanno mai completato il corso e quelli che hanno già completato il corso almeno una volta ma il cui certificato è scaduto.
+Attivando il flag `Archive completion data` nel plugin [Course recompletion](https://moodle.org/plugins/local_recompletion) del `corso A`, i dati sui completamenti annullati vengono archiviati in una tabella separata. Non è però possibile interagire su questi dati da interfaccia Moodle e in particolare non è possibile attivare delle condizioni di completamento.
 
-Gli studenti che non hanno mai completato il corso potranno accedere all'attività che permette l'iscrizione al corso in presenza.   
-Gli studenti che hanno già frequentato il corso e a cui è scaduto il certificato e devono rifare il corso non potranno accedere all'attività che permette l'iscrizione al corso in presenza. Potranno eventualmente iscriversi e accedere alle attività di un differente corso che non prevede la presenza in aula. 
+Ci viene quindi in aiuto questo plugin, il quale, basandosi sui dati dati di ricompletamento archiviati, permette di distinguere tra gli utenti che non hanno mai completato il corso e quelli che hanno già completato il corso almeno una volta ma il cui completamento è scaduto.   
+E' quindi possibile impostare delle attività/risorse/sezioni del corso con visibilità condizionata dal completamento annullato del corso.
 
+Per esempio, se lo studente non ha mai completato il `corso A` o lo ha completato ma non è scaduto:
+- deve poter poter vedere i contenuti del `corso A`;
+- i contenuti del corso di aggiornamento B vengono nascosti;
+- nel `corso B` potrebbe essere inserita un'area di testo informativa che indica allo studente la necessità di fare riferimento al `corso A`.
 
-Usage & Settings
-----------------
+Oppure, se lo studente ha completato il `corso A` ma il completamento è scaduto:
+- deve poter poter vedere i contenuti del `corso B`;
+- alcune attività/risorse del `corso A` (es. Quiz finale, certificato) vanno nascoste;
+- nel `corso A` potrebbe essere inserita un'area di testo informativa che indica allo studente il link per iscriversi al corso di aggiornamento B.
 
-After installing the plugin, it is ready to use without the need for any configuration.
-
-Teachers (and other users with editing rights) can add the "Recompletion" availability condition to activities in their courses. While adding the condition, they have to define the course to which the recompletion refers.
-
-As Moodle admin, you have already created two course: in-person (course A) and renewal (course B).
-
-### Course A
-
-The administrator/teacher must restrict the enrollment activities for the in-person lessons of course A to students who are taking the course for the first time.
-
-The teacher, when adding a new choicegroup activity for "Prenotazione edizione x", in "Settings / Restrict access" must add "Student Restriction type MUST NOT match the following: Must have undone the course completion THIS COURSE".
-
-IT "Impostazioni / Condizioni per l'accesso" -> "Lo studente NON DEVE soddisfare il seguente criterio: Deve aver annullato il completamento del corso QUESTO CORSO".
-
-### Course B
-
-The administrator/teacher must restrict the activities of course B to students who, for example, only need to renew the certificate.
-
-The teacher, in "Settings / Restrict access" for individual activities, must add "Student Restriction type MUST match the following: Must have undone the course completion COURSE A".
-
-IT "Impostazioni / Condizioni per l'accesso" -> "Lo studente DEVE soddisfare il seguente criterio: Deve aver annullato il completamento del corso COURSE A".
+Tutta la configurazione qui ipotizzata per il `corso A` e B potrebbe essere pensata in un unico corso, aggiungendo le sezioni del `corso B` direttamente nel `corso A` e mostrando i contenuti del corso base e i contenuti del corso di aggiornamento in funzione delle descritte condizioni.    
+La scelta se creare due corsi distinti o un unico corso potrebbe essere fatta ad esempio in base a:
+- questioni didattiche (es. docenti differenti);
+- per non appesantire troppo un corso se ci sono molti contenuti;
+- se vogliamo una reportistica differente fra chi ha fatto il corso base e chi l'aggiornamento;
+- se vogliamo erogare dei badge differenti in funzione del tipo di corso completato.
