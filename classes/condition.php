@@ -136,22 +136,21 @@ class condition extends \core_availability\condition {
         // When the condition is set on a course different from the current one,
         // instead of using 'this course' I use the name of the course on which the constraint was applied.
         if ($info->get_course()->id != $this->courseid && $this->courseid != null) {
+            $course = $DB->get_record('course', ['id' => $this->courseid], 'fullname');
 
-            $sqlcourseobj = "SELECT * FROM {course} WHERE id = $this->courseid LIMIT 1";
-            $courseobj = $DB->get_record_sql($sqlcourseobj);
-
-            // Print the id of the course if the course is not found.
-            $name = $courseobj != null && $courseobj->fullname != null ? $courseobj->fullname : $this->courseid;
+            // If it is a course that no longer exists (deleted), return a warning.
+            if (!$course) {
+                return get_string('course_not_found', 'availability_recompletion', $this->courseid ?? 'null');
+            }
+            $name = $course->fullname;
         }
 
         // If $not == true => in Access restrictions the condition is set to 'Student must not match the following'.
         $requireornot = $not ? 'requires_recompletion' : 'requires_notrecompletion';
 
-        // Courseobj->fullname can contains the whole {mlang XX} ... {mlang} tags and different language strings.
+        // Name can contains the whole {mlang XX} ... {mlang} tags and different language strings.
         // With format_string only the translation of the language set by the user is shown.
-        $context = \context_course::instance($this->courseid);
-        $nametranslated = format_string($name, true, ['context' => $context]);
-        return get_string($requireornot, 'availability_recompletion', $nametranslated);
+        return get_string($requireornot, 'availability_recompletion', format_string($name));
     }
 
     /**

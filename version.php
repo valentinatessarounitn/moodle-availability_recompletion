@@ -25,9 +25,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'availability_recompletion';
-$plugin->release = '0.1.0';
-$plugin->version = 2024111901;
+$plugin->release = '0.1.1';
+$plugin->version = 2024111903;
 $plugin->requires = 2022112800;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->supported = [401, 401];
+$plugin->supported = [401, 405];
 $plugin->dependencies = ['local_recompletion' => 2023112707];

@@ -31,3 +31,4 @@ $string['privacy:metadata'] = 'The Restriction by recompletion plugin does not s
 $string['error_selectcmid'] = 'You must select a course for the recompletion condition.';
 $string['label'] = ' Must have undone the course completion ';
 $string['this_course'] = 'this course';
+$string['course_not_found'] = 'The condition refers to a course that no longer exists with ID {$a}, it was probably deleted. This condition needs to be reviewed.';

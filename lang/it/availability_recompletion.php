@@ -31,3 +31,4 @@ $string['privacy:metadata'] = 'Il plugin Restrizione per ricompletamento non mem
 $string['error_selectcmid'] = 'Devi selezionare un corso per la condizione di ricompletamento.';
 $string['label'] = ' Deve aver annullato il completamento del corso ';
 $string['this_course'] = 'questo corso';
+$string['course_not_found'] = 'La condizione si riferisce ad un corso che non esiste più con ID {$a}, probabilmente è stato eliminato. Serve rivedere questa condizione.';
