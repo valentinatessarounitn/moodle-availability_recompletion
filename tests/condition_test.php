@@ -153,8 +153,8 @@ class condition_test extends \advanced_testcase {
         $info = new \core_availability\mock_info();
 
         // Test course inpersoncourse.
-        $requiresrecompletion = '~has <strong>not</strong> completed <strong>'.$this->inpersoncourse->fullname.'</strong>~';
-        $notrequiresrecompletion = '~has already completed <strong>'.$this->inpersoncourse->fullname.'</strong>~';
+        $requiresrecompletion = '~<strong>must not</strong> have undone the completion of <strong>'.$this->inpersoncourse->fullname.'</strong>~';
+        $notrequiresrecompletion = '~must have undone the completion of <strong>'.$this->inpersoncourse->fullname.'</strong>~';
         $structure = (object)['type' => 'recompletion', 'cm' => $this->inpersoncourse->id];
         $cond = new condition($structure);
         $description = $cond->get_description(true, false, $info);
@@ -163,8 +163,8 @@ class condition_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression($requiresrecompletion, $description);
 
         // Test course inpersoncourse.
-        $requiresrecompletion = '~has <strong>not</strong> completed <strong>'.$this->renewalcourse->fullname.'</strong>~';
-        $notrequiresrecompletion = '~has already completed <strong>'.$this->renewalcourse->fullname.'</strong>~';
+        $requiresrecompletion = '~<strong>must not</strong> have undone the completion of <strong>'.$this->renewalcourse->fullname.'</strong>~';
+        $notrequiresrecompletion = '~must have undone the completion of <strong>'.$this->renewalcourse->fullname.'</strong>~';
         $structure = (object)['type' => 'recompletion', 'cm' => $this->renewalcourse->id];
         $cond = new condition($structure);
         $description = $cond->get_description(true, false, $info);
@@ -204,6 +204,6 @@ class condition_test extends \advanced_testcase {
 
          // Test "this course": the condition is set for the course inperson and the user is inside the same course.
         $description = $cond->get_description(true, false, $info);
-        $this->assertMatchesRegularExpression('~already completed <strong>this course</strong>~', $description);
+        $this->assertMatchesRegularExpression('~must have undone the completion of <strong>this course</strong>~', $description);
     }
 }

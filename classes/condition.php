@@ -131,18 +131,17 @@ class condition extends \core_availability\condition {
         global $DB;
 
         // Default value is 'this course'.
-        $name = get_string('this_course', 'availability_recompletion');
+        $fullname = get_string('this_course', 'availability_recompletion');
 
         // When the condition is set on a course different from the current one,
         // instead of using 'this course' I use the name of the course on which the constraint was applied.
         if ($info->get_course()->id != $this->courseid && $this->courseid != null) {
-            $course = $DB->get_record('course', ['id' => $this->courseid], 'fullname');
+            $fullname = $DB->get_field('course', 'fullname', ['id' => $this->courseid]);
 
             // If it is a course that no longer exists (deleted), return a warning.
-            if (!$course) {
+            if (!$fullname) {
                 return get_string('course_not_found', 'availability_recompletion', $this->courseid ?? 'null');
             }
-            $name = $course->fullname;
         }
 
         // If $not == true => in Access restrictions the condition is set to 'Student must not match the following'.
@@ -150,7 +149,7 @@ class condition extends \core_availability\condition {
 
         // Name can contains the whole {mlang XX} ... {mlang} tags and different language strings.
         // With format_string only the translation of the language set by the user is shown.
-        return get_string($requireornot, 'availability_recompletion', format_string($name));
+        return get_string($requireornot, 'availability_recompletion', format_string($fullname));
     }
 
     /**

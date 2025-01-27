@@ -62,7 +62,6 @@ class frontend extends \core_availability\frontend {
         // passed into your JavaScript init method. If you don't include
         // this function, there will be no parameters.
         global $DB;
-        $context = \context_course::instance($course->id);
 
         // Get all course names that are present in the recompletion table.
         $datcms = [];
@@ -87,10 +86,9 @@ class frontend extends \core_availability\frontend {
 
             if (($othercm->category > 0) && ($othercm->id == $course->id)) {
                 // Add the current course to the list with as 'this course'.
-                $thiscourse = get_string('this_course', 'availability_recompletion');
                 $datcms[] = (object)[
                     'id' => $course->id,
-                    'name' => format_string($thiscourse, true, ['context' => $context]),
+                    'name' => get_string('this_course', 'availability_recompletion'),
                 ];
             }
 
@@ -98,7 +96,7 @@ class frontend extends \core_availability\frontend {
             if (($othercm->category > 0) && ($othercm->id != $course->id)) {
                     $datcms[] = (object)[
                         'id' => $othercm->id,
-                        'name' => format_string($othercm->shortname, true, ['context' => $context]),
+                        'name' => $othercm->shortname,
                     ];
             }
         }
