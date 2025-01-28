@@ -22,13 +22,13 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['course_not_found'] = 'La condizione si riferisce ad un corso che non esiste più con ID {$a}, probabilmente è stato eliminato. Serve rivedere questa condizione.';
 $string['description'] = 'Escludi o limita agli studenti che hanno un completamento corso annullato.';
-$string['pluginname'] = 'Criterio basato sul ricompletamento';
-$string['title'] = 'Ricompletamento';
-$string['requires_recompletion'] = 'Lo studente <strong>non</strong> deve avere il completamento annullato di <strong>{$a}</strong>.';
-$string['requires_notrecompletion'] = 'Lo studente deve avere il completamento annullato di <strong>{$a}</strong>.';
-$string['privacy:metadata'] = 'Il plugin Restrizione per ricompletamento non memorizza alcun dato personale.';
 $string['error_selectcmid'] = 'Devi selezionare un corso per la condizione di ricompletamento.';
 $string['label'] = ' Deve aver annullato il completamento del corso ';
+$string['pluginname'] = 'Criterio basato sul ricompletamento';
+$string['privacy:metadata'] = 'Il plugin Restrizione per ricompletamento non memorizza alcun dato personale.';
+$string['requires_recompletion'] = 'Lo studente <strong>non</strong> deve avere il completamento annullato di <strong>{$a}</strong>.';
+$string['requires_notrecompletion'] = 'Lo studente deve avere il completamento annullato di <strong>{$a}</strong>.';
 $string['this_course'] = 'questo corso';
-$string['course_not_found'] = 'La condizione si riferisce ad un corso che non esiste più con ID {$a}, probabilmente è stato eliminato. Serve rivedere questa condizione.';
+$string['title'] = 'Ricompletamento';

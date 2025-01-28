@@ -30,7 +30,7 @@ use stdClass;
  * @copyright   2025 Tessaro Valentina <valentina.tessaro@unitn.it>>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class condition_test extends \advanced_testcase {
+final class condition_test extends \advanced_testcase {
 
     /** @var stdClass inpersoncourse. */
     private $inpersoncourse;
@@ -75,7 +75,7 @@ class condition_test extends \advanced_testcase {
      *
      * @covers \availability_recompletion\condition::save()
      */
-    public function test_save_equals() {
+    public function test_save_equals(): void {
         $structure = (object)['cm' => 1];
         $cond = new condition($structure);
         $structure->type = 'recompletion';
@@ -91,7 +91,7 @@ class condition_test extends \advanced_testcase {
      *
      * @covers \availability_recompletion\condition::save()
      */
-    public function test_save_not_equals() {
+    public function test_save_not_equals(): void {
         $structure = (object)['cm' => 1];
         $cond = new condition($structure);
         $cond->cm = 3;
@@ -103,7 +103,7 @@ class condition_test extends \advanced_testcase {
      *
      * @covers \availability_recompletion\condition::__construct($structure)
      */
-    public function test_constructor_exception() {
+    public function test_constructor_exception(): void {
         $msg = 'Coding error detected, it must be fixed by a programmer: Invalid course ID: null or non-integer value';
 
         // No parameters.
@@ -133,7 +133,7 @@ class condition_test extends \advanced_testcase {
      * @covers \availability_recompletion\condition::__construct($structure)
      * @covers \availability_recompletion\condition::get_debug_string()
      */
-    public function test_constructor() {
+    public function test_constructor(): void {
 
         $structure = (object)['cm' => 10242];
         $cond = new condition($structure);
@@ -152,9 +152,13 @@ class condition_test extends \advanced_testcase {
     public function test_get_description(): void {
         $info = new \core_availability\mock_info();
 
+        $prefixrequires = '~<strong>must not</strong> have undone the completion of <strong>';
+        $prefixnotrequires = '~must have undone the completion of <strong>';
+        $suffix = '</strong>~';
+
         // Test course inpersoncourse.
-        $requiresrecompletion = '~<strong>must not</strong> have undone the completion of <strong>'.$this->inpersoncourse->fullname.'</strong>~';
-        $notrequiresrecompletion = '~must have undone the completion of <strong>'.$this->inpersoncourse->fullname.'</strong>~';
+        $requiresrecompletion = $prefixrequires . $this->inpersoncourse->fullname . $suffix;
+        $notrequiresrecompletion = $prefixnotrequires . $this->inpersoncourse->fullname . $suffix;
         $structure = (object)['type' => 'recompletion', 'cm' => $this->inpersoncourse->id];
         $cond = new condition($structure);
         $description = $cond->get_description(true, false, $info);
@@ -163,8 +167,8 @@ class condition_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression($requiresrecompletion, $description);
 
         // Test course inpersoncourse.
-        $requiresrecompletion = '~<strong>must not</strong> have undone the completion of <strong>'.$this->renewalcourse->fullname.'</strong>~';
-        $notrequiresrecompletion = '~must have undone the completion of <strong>'.$this->renewalcourse->fullname.'</strong>~';
+        $requiresrecompletion = $prefixrequires . $this->renewalcourse->fullname . $suffix;
+        $notrequiresrecompletion = $prefixnotrequires . $this->renewalcourse->fullname . $suffix;
         $structure = (object)['type' => 'recompletion', 'cm' => $this->renewalcourse->id];
         $cond = new condition($structure);
         $description = $cond->get_description(true, false, $info);
