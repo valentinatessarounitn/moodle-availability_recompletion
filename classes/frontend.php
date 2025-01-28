@@ -55,8 +55,8 @@ class frontend extends \core_availability\frontend {
      */
     protected function get_javascript_init_params(
         $course,
-        \cm_info $cm = null,
-        \section_info $section = null
+        ?\cm_info $cm = null,
+        ?\section_info $section = null
     ) {
         // If you want, you can add some parameters here which will be
         // passed into your JavaScript init method. If you don't include
@@ -108,14 +108,14 @@ class frontend extends \core_availability\frontend {
      * Can only be added if there's at least one course with recompletion info.
      *
      * @param \stdClass $course
-     * @param \cm_info|null $cm
-     * @param \section_info|null $section
+     * @param ?\cm_info|null $cm
+     * @param ?\section_info|null $section
      * @return bool
      */
     protected function allow_add(
         $course,
-        \cm_info $cm = null,
-        \section_info $section = null
+        ?\cm_info $cm = null,
+        ?\section_info $section = null
     ) {
         // This function lets you control whether the 'add' button for your
         // plugin appears. For example, the grouping plugin does not appear

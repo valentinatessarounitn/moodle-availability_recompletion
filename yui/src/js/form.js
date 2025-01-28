@@ -3,7 +3,7 @@
  *
  * @module moodle-availability_recompletion-form
  */
-M.availability_recompletion = M.availability_recompletion || {};
+M.availability_recompletion = M.availability_recompletion || {}; // eslint-disable-line camelcase
 
 /**
  * @class M.availability_recompletion.form
@@ -23,11 +23,10 @@ M.availability_recompletion.form.initInner = function(cms) {
 
 M.availability_recompletion.form.getNode = function(json) {
     // Create HTML structure.
-    var html =  '<span class="col-form-label p-r-1"> ' + M.util.get_string('title', 'availability_recompletion') + ' </span><br/>' +
+    var html = '<span class="col-form-label p-r-1">' + M.util.get_string('title', 'availability_recompletion') + '</span><br/>' +
     '<label>' + M.util.get_string('label', 'availability_recompletion') +
     ' <select class="custom-select" name="cm" style="margin-right:20px">' +
     '<option value="0">' + M.util.get_string('choosedots', 'moodle') + '</option>';
-    
     for (var i = 0; i < this.cms.length; i++) {
         var cm = this.cms[i];
         // String has already been escaped using format_string.

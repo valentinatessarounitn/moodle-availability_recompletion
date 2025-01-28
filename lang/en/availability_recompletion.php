@@ -22,13 +22,13 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['course_not_found'] = 'The condition refers to a course that no longer exists with ID {$a}, it was probably deleted. This condition needs to be reviewed.';
 $string['description'] = 'Exclude or limit to students who have undone course completion.';
-$string['pluginname'] = 'Restriction by recompletion';
-$string['title'] = 'Recompletion';
-$string['requires_recompletion'] = 'The student <strong>must not</strong> have undone the completion of <strong>{$a}</strong>.';
-$string['requires_notrecompletion'] = 'The student must have undone the completion of <strong>{$a}</strong>.';
-$string['privacy:metadata'] = 'The Restriction by recompletion plugin does not store any personal data.';
 $string['error_selectcmid'] = 'You must select a course for the recompletion condition.';
 $string['label'] = ' Must have undone the course completion ';
+$string['pluginname'] = 'Restriction by recompletion';
+$string['privacy:metadata'] = 'The Restriction by recompletion plugin does not store any personal data.';
+$string['requires_recompletion'] = 'The student <strong>must not</strong> have undone the completion of <strong>{$a}</strong>.';
+$string['requires_notrecompletion'] = 'The student must have undone the completion of <strong>{$a}</strong>.';
 $string['this_course'] = 'this course';
-$string['course_not_found'] = 'The condition refers to a course that no longer exists with ID {$a}, it was probably deleted. This condition needs to be reviewed.';
+$string['title'] = 'Recompletion';
