@@ -152,9 +152,13 @@ final class condition_test extends \advanced_testcase {
     public function test_get_description(): void {
         $info = new \core_availability\mock_info();
 
+        $prefixrequires = '~<strong>must not</strong> have undone the completion of <strong>';
+        $prefixnotrequires = '~must have undone the completion of <strong>';
+        $suffix = '</strong>~';
+
         // Test course inpersoncourse.
-        $requiresrecompletion = '~<strong>must not</strong> have undone the completion of <strong>'.$this->inpersoncourse->fullname.'</strong>~';
-        $notrequiresrecompletion = '~must have undone the completion of <strong>'.$this->inpersoncourse->fullname.'</strong>~';
+        $requiresrecompletion = $prefixrequires . $this->inpersoncourse->fullname . $suffix;
+        $notrequiresrecompletion = $prefixnotrequires . $this->inpersoncourse->fullname . $suffix;
         $structure = (object)['type' => 'recompletion', 'cm' => $this->inpersoncourse->id];
         $cond = new condition($structure);
         $description = $cond->get_description(true, false, $info);
@@ -163,8 +167,8 @@ final class condition_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression($requiresrecompletion, $description);
 
         // Test course inpersoncourse.
-        $requiresrecompletion = '~<strong>must not</strong> have undone the completion of <strong>'.$this->renewalcourse->fullname.'</strong>~';
-        $notrequiresrecompletion = '~must have undone the completion of <strong>'.$this->renewalcourse->fullname.'</strong>~';
+        $requiresrecompletion = $prefixrequires . $this->renewalcourse->fullname . $suffix;
+        $notrequiresrecompletion = $prefixnotrequires . $this->renewalcourse->fullname . $suffix;
         $structure = (object)['type' => 'recompletion', 'cm' => $this->renewalcourse->id];
         $cond = new condition($structure);
         $description = $cond->get_description(true, false, $info);
