@@ -104,13 +104,13 @@ class frontend extends \core_availability\frontend {
     }
 
     /**
-     * Check if the condition can be added.
-     * Can only be added if there's at least one course with recompletion info.
+     * Decides whether this plugin should be available in a given course. The
+     * plugin can do this depending on course or system settings.
      *
-     * @param \stdClass $course
-     * @param ?\cm_info|null $cm
-     * @param ?\section_info|null $section
-     * @return bool
+     * @param \stdClass $course Course object
+     * @param ?\cm_info $cm Course-module currently being edited (null if none)
+     * @param ?\section_info $section Section currently being edited (null if none)
+     * @return bool True if there are completion criteria
      */
     protected function allow_add(
         $course,
