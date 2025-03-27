@@ -36,7 +36,7 @@ class frontend extends \core_availability\frontend {
     /**
      * Gets a list of string identifiers (in the plugin's language file) that are required in JavaScript for this plugin.
      *
-     * @return Array of required string identifiers
+     * @return array of required string identifiers
      */
     protected function get_javascript_strings() {
         // You can return a list of names within your language file and the
@@ -76,7 +76,7 @@ class frontend extends \core_availability\frontend {
                 WHERE id IN (
                     SELECT course FROM {local_recompletion_cc} WHERE timecompleted IS NOT NULL
                     UNION
-                    SELECT course FROM {local_recompletion_config} WHERE name='archivecompletiondata' AND VALUE=1
+                    SELECT course FROM {local_recompletion_config} WHERE name='archivecompletiondata' AND value='1'
                 )
                 ORDER BY fullname ASC";
 
